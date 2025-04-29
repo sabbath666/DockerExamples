@@ -1,6 +1,9 @@
-FROM openjdk:21
+FROM maven:21 as build
+COPY src /src
+RUN mvn clean package
+
+FROM build
 WORKDIR /app
-COPY ./settings.yml /app/settings.yml
 COPY target/cowsay-0.0.1.jar cowsay.jar
 RUN mkdir data
 ENTRYPOINT ["java", "-jar", "cowsay.jar"]
